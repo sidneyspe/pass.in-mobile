@@ -1,11 +1,13 @@
-import { View, Text } from 'react-native'
+import { StatusBar } from 'expo-status-bar'
 
-export default function Home() {
+import React from 'react'
+import { Home } from './home'
+
+export default function App() {
   return (
-    <View>
-      <Text>
-        Hello
-      </Text>
-    </View>
+    <>
+      <Home />
+      <StatusBar style='auto' />
+    </>
   )
 }
