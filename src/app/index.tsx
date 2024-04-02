@@ -1,13 +1,11 @@
-import { StatusBar } from 'expo-status-bar'
+import { View, Text } from 'react-native'
 
-import React from 'react'
-import { Home } from './home'
-
-export default function App() {
+export default function Home() {
   return (
-    <>
-      <Home />
-      <StatusBar style='light' />
-    </>
+    <View className='flex flex-1 bg-green-500 items-center justify-center'>
+      <Text className='text-white'>
+        Hello Worlda
+      </Text>
+    </View>
   )
 }
