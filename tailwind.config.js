@@ -1,4 +1,5 @@
 import { colors } from './src/styles/colors'
+import { fontFamily } from './src/styles/fontFamily'
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
@@ -6,15 +7,8 @@ module.exports = {
   presets: [require("nativewind/preset")],
   theme: {
     extend: {
-      fontFamily: {
-        title: 'Roboto_700Bold',
-        body: 'Roboto_400Regular',
-        alt: 'BaiJamjuree_700Bold',
-      },
-
-      colors: {
-        colors,
-      },
+      fontFamily,
+      colors,
     },
   },
   plugins: [],
