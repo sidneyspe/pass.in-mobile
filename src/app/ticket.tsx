@@ -75,7 +75,7 @@ export default function Ticket() {
         <Credential
           data={badgeStore.data}
           onChangeAvatar={handleSelectImage}
-          onShowQRCode={() => setExpandQRCode(true)}
+          onExpandQRCode={() => setExpandQRCode(true)}
         />
 
         <MotiView
