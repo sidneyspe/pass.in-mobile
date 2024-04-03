@@ -25,7 +25,7 @@ export default function Ticket() {
         aspect: [4, 4],
       });
       if (result.assets) {
-        console.log(result.assets);
+        setImage(result.assets[0].uri);
       }
     } catch (error) {
       console.log(error);
