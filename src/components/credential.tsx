@@ -68,7 +68,7 @@ export function Credential({ data, onChangeAvatar, onExpandQRCode }: Props) {
             <Text className="text-sm font-bold text-zinc-50">#{data.id}</Text>
           </View>
 
-          <View className="h-40 w-40 rounded-full bg-black" />
+          <View className="h-40 w-40 rounded-full bg-black/20" />
         </ImageBackground>
 
         {data.image ? (
