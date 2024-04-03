@@ -1,13 +1,15 @@
-import { View, Image, Alert, StatusBar } from "react-native";
+import { useState } from "react";
+import { View, Image, StatusBar, Alert } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Link, Redirect } from "expo-router";
-import { useState } from "react";
-import { Input } from "@/components/input";
-import { Button } from "@/components/button";
-import { colors } from "@/styles/colors";
-import axios from "axios";
+
 import { api } from "@/server/api";
 import { useBadgeStore } from "@/store/badge-store";
+
+import { colors } from "@/styles/colors";
+
+import { Input } from "@/components/input";
+import { Button } from "@/components/button";
 
 export default function Home() {
   const [code, setCode] = useState("");
@@ -17,27 +19,28 @@ export default function Home() {
 
   async function handleAccessCredential() {
     try {
-      if (!code.trim())
+      if (!code.trim()) {
         return Alert.alert("Ingresso", "Informe o código do ingresso!");
+      }
 
       setIsLoading(true);
 
       const { data } = await api.get(`/attendees/${code}/badge`);
-
-      badgeStore.save(data);
-      console.log("🚀 ~ handleAccessCredential ~ data:", data);
+      badgeStore.save(data.badge);
     } catch (error) {
-      console.log("🚀 ~ handleAccessCredential ~ error:", error);
+      console.log(error);
       setIsLoading(false);
 
       Alert.alert("Ingresso", "Ingresso não encontrado!");
     }
   }
 
-  if (badgeStore.data?.checkInURL) return <Redirect href="/ticket" />;
+  if (badgeStore.data?.checkInURL) {
+    return <Redirect href="/ticket" />;
+  }
 
   return (
-    <View className="flex flex-1 items-center justify-center bg-green-500 p-8">
+    <View className="flex-1 items-center justify-center bg-green-500 p-8">
       <StatusBar barStyle="light-content" />
 
       <Image
@@ -58,14 +61,16 @@ export default function Home() {
             onChangeText={setCode}
           />
         </Input>
+
         <Button
           title="Acessar credencial"
           onPress={handleAccessCredential}
           isLoading={isLoading}
         />
+
         <Link
           href="/register"
-          className="mt-8 text-center text-base text-gray-100"
+          className="mt-8 text-center text-base font-bold text-gray-100"
         >
           Ainda não possui ingresso?
         </Link>
