@@ -4,18 +4,21 @@ import { Header } from "@/components/header";
 import { colors } from "@/styles/colors";
 import { FontAwesome } from "@expo/vector-icons";
 import { useState } from "react";
+import * as ImagePicker from "expo-image-picker";
 import {
   Alert,
+  Modal,
   ScrollView,
   StatusBar,
   Text,
   TouchableOpacity,
   View,
 } from "react-native";
-import * as ImagePicker from "expo-image-picker";
+import { QRCode } from "@/components/qrcode";
 
 export default function Ticket() {
   const [image, setImage] = useState("");
+  const [expandQRCode, setExpandQRCode] = useState(false);
 
   async function handleSelectImage() {
     try {
@@ -42,7 +45,11 @@ export default function Ticket() {
         contentContainerClassName="px-8 pb-8"
         showsVerticalScrollIndicator={false}
       >
-        <Credential image={image} onChangeAvatar={handleSelectImage} />
+        <Credential
+          image={image}
+          onChangeAvatar={handleSelectImage}
+          onShowQRCode={() => setExpandQRCode(true)}
+        />
         <FontAwesome
           name="angle-double-down"
           size={24}
@@ -63,6 +70,20 @@ export default function Ticket() {
           </Text>
         </TouchableOpacity>
       </ScrollView>
+
+      <Modal visible={expandQRCode} statusBarTranslucent animationType="slide">
+        <View className="flex-1 items-center justify-center bg-green-500">
+          <TouchableOpacity
+            activeOpacity={0.7}
+            onPress={() => setExpandQRCode(false)}
+          >
+            <QRCode value="teste" size={300} />
+            <Text className="font-body mt-10 text-center text-sm text-orange-500">
+              Fechar QRCode
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </Modal>
     </View>
   );
 }

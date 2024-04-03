@@ -7,13 +7,15 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { QRCode } from "@/components/qrcode";
 
 type Props = {
   image?: string;
   onChangeAvatar?: () => void;
+  onShowQRCode?: () => void;
 };
 
-export function Credential({ image, onChangeAvatar }: Props) {
+export function Credential({ image, onShowQRCode, onChangeAvatar }: Props) {
   return (
     <View className="w-full items-center self-stretch">
       <Image
@@ -59,12 +61,13 @@ export function Credential({ image, onChangeAvatar }: Props) {
           sidneyspe@gmail.com
         </Text>
 
-        <Image
-          source={require("@/assets/ticket/qrcode.png")}
-          className="h-32 w-32"
-        />
+        <QRCode value="teste" size={120} />
 
-        <TouchableOpacity activeOpacity={0.7} className="mt-6">
+        <TouchableOpacity
+          activeOpacity={0.7}
+          className="mt-6"
+          onPress={onShowQRCode}
+        >
           <Text className="font-body text-sm text-orange-500">
             Ampliar QRCode
           </Text>

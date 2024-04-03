@@ -1,10 +1,10 @@
-import { Input } from "@/components/input";
 import { View, Image, Alert, StatusBar } from "react-native";
 import { FontAwesome6, MaterialIcons } from "@expo/vector-icons";
-import { colors } from "@/styles/colors";
-import { Button } from "@/components/button";
 import { Link, router } from "expo-router";
 import { useState } from "react";
+import { Input } from "@/components/input";
+import { Button } from "@/components/button";
+import { colors } from "@/styles/colors";
 
 export default function Register() {
   const [name, setName] = useState("");

@@ -1,10 +1,10 @@
-import { Input } from "@/components/input";
 import { View, Image, Alert, StatusBar } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { colors } from "@/styles/colors";
-import { Button } from "@/components/button";
 import { Link } from "expo-router";
 import { useState } from "react";
+import { Input } from "@/components/input";
+import { Button } from "@/components/button";
+import { colors } from "@/styles/colors";
 
 export default function Home() {
   const [code, setCode] = useState("");
