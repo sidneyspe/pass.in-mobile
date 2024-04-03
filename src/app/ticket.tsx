@@ -1,24 +1,45 @@
-import { Button } from "@/components/button";
-import { Credential } from "@/components/credential";
-import { Header } from "@/components/header";
-import { colors } from "@/styles/colors";
-import { FontAwesome } from "@expo/vector-icons";
 import { useState } from "react";
-import * as ImagePicker from "expo-image-picker";
 import {
+  Text,
+  View,
   Alert,
   Modal,
-  ScrollView,
+  Share,
   StatusBar,
-  Text,
+  ScrollView,
   TouchableOpacity,
-  View,
 } from "react-native";
+import { MotiView } from "moti";
+import { FontAwesome } from "@expo/vector-icons";
+import * as ImagePicker from "expo-image-picker";
+import { Redirect } from "expo-router";
+
+import { useBadgeStore } from "@/store/badge-store";
+
+import { colors } from "@/styles/colors";
+
+import { Header } from "@/components/header";
+import { Button } from "@/components/button";
 import { QRCode } from "@/components/qrcode";
+import { Credential } from "@/components/credential";
 
 export default function Ticket() {
-  const [image, setImage] = useState("");
   const [expandQRCode, setExpandQRCode] = useState(false);
+
+  const badgeStore = useBadgeStore();
+
+  async function handleShare() {
+    try {
+      if (badgeStore.data?.checkInURL) {
+        await Share.share({
+          message: badgeStore.data.checkInURL,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+      Alert.alert("Compartilhar", "Não foi possível compartilhar.");
+    }
+  }
 
   async function handleSelectImage() {
     try {
@@ -27,8 +48,9 @@ export default function Ticket() {
         allowsEditing: true,
         aspect: [4, 4],
       });
+
       if (result.assets) {
-        setImage(result.assets[0].uri);
+        badgeStore.updateAvatar(result.assets[0].uri);
       }
     } catch (error) {
       console.log(error);
@@ -36,42 +58,70 @@ export default function Ticket() {
     }
   }
 
+  if (!badgeStore.data?.checkInURL) {
+    return <Redirect href="/" />;
+  }
+
   return (
     <View className="flex-1 bg-green-500">
       <StatusBar barStyle="light-content" />
       <Header title="Minha Credencial" />
+
       <ScrollView
         className="-z-10 -mt-28"
         contentContainerClassName="px-8 pb-8"
         showsVerticalScrollIndicator={false}
       >
         <Credential
-          image={image}
+          data={badgeStore.data}
           onChangeAvatar={handleSelectImage}
           onShowQRCode={() => setExpandQRCode(true)}
         />
-        <FontAwesome
-          name="angle-double-down"
-          size={24}
-          color={colors.gray[300]}
-          className="my-6 self-center"
-        />
+
+        <MotiView
+          from={{
+            translateY: 0,
+          }}
+          animate={{
+            translateY: 10,
+          }}
+          transition={{
+            loop: true,
+            type: "timing",
+            duration: 700,
+          }}
+        >
+          <FontAwesome
+            name="angle-double-down"
+            color={colors.gray[300]}
+            size={24}
+            className="my-6 self-center"
+          />
+        </MotiView>
+
         <Text className="mt-4 text-2xl font-bold text-white">
-          Compartilhar Credencial
-        </Text>
-        <Text className="mb-6 mt-1 font-regular text-base text-white">
-          Mostre ao mundo que você vai participar do Unite Summit!
+          Compartilhar credencial
         </Text>
 
-        <Button title="Compartilhar" />
-        <TouchableOpacity activeOpacity={0.7} className="mt-10">
+        <Text className="mb-6 mt-1 font-regular text-base text-white">
+          Mostre ao mundo que você vai participar do evento{" "}
+          {badgeStore.data.eventTitle}!
+        </Text>
+
+        <Button title="Compartilhar" onPress={handleShare} />
+
+        <TouchableOpacity
+          className="mt-10"
+          activeOpacity={0.7}
+          onPress={() => badgeStore.remove()}
+        >
           <Text className="text-center text-base font-bold text-white">
-            Remover ingresso
+            Remover Ingresso
           </Text>
         </TouchableOpacity>
       </ScrollView>
 
-      <Modal visible={expandQRCode} statusBarTranslucent animationType="slide">
+      <Modal visible={expandQRCode} statusBarTranslucent>
         <View className="flex-1 items-center justify-center bg-green-500">
           <TouchableOpacity
             activeOpacity={0.7}
